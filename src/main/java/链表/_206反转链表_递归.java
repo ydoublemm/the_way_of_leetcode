@@ -6,36 +6,51 @@ import java.io.InputStreamReader;
 
 /**
  * @Author: ymm
- * @Date: 2018/12/2 23:47
+ * @Date: 2018/12/4 23:45
  * @Description:
  */
-class Solution203 {
-    public ListNode removeElements(ListNode head, int val) {
-        if(head == null)
-            return null;
-        ListNode currentNode = head;
-        while (currentNode !=null){
-            if (currentNode.val == val) {
-                //如果是头节点
-                if (currentNode == head){
-                    head = head.next;
-                }else {
-                    ListNode preNode = head;
-                    while(preNode.next != currentNode){
-                        preNode = preNode.next;
-                    }
-                    preNode.next = currentNode.next;
-
-                }
-            }
-            currentNode = currentNode.next;
+class Solution206 {
+    //迭代
+    public ListNode reverseList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
         }
+        ListNode preNode = head;
+        head = head.next;
+        preNode.next = null;
+        while (head != null) {
+            ListNode tempNode = head;
+            head = head.next;
+            tempNode.next = preNode;
+            preNode = tempNode;
+        }
+        return preNode;
+    }
 
-        return head;
+    //递归
+    public ListNode reverseList2(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode node = reverse(head);
+        node.next = null;
+        return node;
+
+    }
+
+    public ListNode reverse(ListNode p) {
+        if (p.next == null) {
+            return p;
+        }else{
+            ListNode next=p.next;
+            ListNode dot=reverse(next);//找到最后一个节点
+            next.next=p;
+            return dot;
+        }
     }
 }
 
-class MainClass203 {
+class MainClass206 {
     public static int[] stringToIntegerArray(String input) {
         input = input.trim();
         input = input.substring(1, input.length() - 1);
@@ -84,10 +99,8 @@ class MainClass203 {
         String line;
         while ((line = in.readLine()) != null) {
             ListNode head = stringToListNode(line);
-            line = in.readLine();
-            int val = Integer.parseInt(line);
 
-            ListNode ret = new Solution203().removeElements(head, val);
+            ListNode ret = new Solution206().reverseList2(head);
 
             String out = listNodeToString(ret);
 

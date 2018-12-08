@@ -6,36 +6,45 @@ import java.io.InputStreamReader;
 
 /**
  * @Author: ymm
- * @Date: 2018/12/2 23:47
+ * @Date: 2018/12/8 16:08
  * @Description:
  */
-class Solution203 {
-    public ListNode removeElements(ListNode head, int val) {
-        if(head == null)
-            return null;
-        ListNode currentNode = head;
-        while (currentNode !=null){
-            if (currentNode.val == val) {
-                //如果是头节点
-                if (currentNode == head){
-                    head = head.next;
-                }else {
-                    ListNode preNode = head;
-                    while(preNode.next != currentNode){
-                        preNode = preNode.next;
-                    }
-                    preNode.next = currentNode.next;
+class Solution143 {
+    //这个方法是找每次都找最后第二个节点，然后找到最后一个节点，插入到前面 O(n^2)
+    //另一个更好的方法是找到中间节点，反转后面的节点，然后把后面的节点插入到前面 O(n)
+    public void reorderList(ListNode head) {
+        int count = 0;
+        ListNode currentNode = head ;
+        while (currentNode != null){
+            count++;
+            currentNode =currentNode.next;
+        }
+        currentNode = head;
+        for(int i=0;i<count/2;i++){
+            ListNode secondLast = findSecondLast(currentNode);
+            ListNode last = secondLast.next;
+            secondLast.next = null;
 
-                }
-            }
-            currentNode = currentNode.next;
+            //交换
+            ListNode currentNext = currentNode.next;
+            currentNode.next = last;
+            last.next = currentNext;
+
+            currentNode = currentNode.next.next;
         }
 
+    }
+
+    //找到最后第二个节点
+    public ListNode findSecondLast(ListNode head){
+        while (head.next.next != null){
+            head = head.next;
+        }
         return head;
     }
 }
 
-class MainClass203 {
+class MainClass143 {
     public static int[] stringToIntegerArray(String input) {
         input = input.trim();
         input = input.substring(1, input.length() - 1);
@@ -45,7 +54,7 @@ class MainClass203 {
 
         String[] parts = input.split(",");
         int[] output = new int[parts.length];
-        for (int index = 0; index < parts.length; index++) {
+        for(int index = 0; index < parts.length; index++) {
             String part = parts[index].trim();
             output[index] = Integer.parseInt(part);
         }
@@ -59,7 +68,7 @@ class MainClass203 {
         // Now convert that list into linked list
         ListNode dummyRoot = new ListNode(0);
         ListNode ptr = dummyRoot;
-        for (int item : nodeValues) {
+        for(int item : nodeValues) {
             ptr.next = new ListNode(item);
             ptr = ptr.next;
         }
@@ -84,12 +93,9 @@ class MainClass203 {
         String line;
         while ((line = in.readLine()) != null) {
             ListNode head = stringToListNode(line);
-            line = in.readLine();
-            int val = Integer.parseInt(line);
 
-            ListNode ret = new Solution203().removeElements(head, val);
-
-            String out = listNodeToString(ret);
+            new Solution143().reorderList(head);
+            String out = listNodeToString(head);
 
             System.out.print(out);
         }

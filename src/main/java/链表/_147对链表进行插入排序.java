@@ -6,36 +6,54 @@ import java.io.InputStreamReader;
 
 /**
  * @Author: ymm
- * @Date: 2018/12/2 23:47
+ * @Date: 2018/12/8 17:02
  * @Description:
  */
-class Solution203 {
-    public ListNode removeElements(ListNode head, int val) {
-        if(head == null)
-            return null;
-        ListNode currentNode = head;
-        while (currentNode !=null){
-            if (currentNode.val == val) {
-                //如果是头节点
-                if (currentNode == head){
-                    head = head.next;
-                }else {
-                    ListNode preNode = head;
-                    while(preNode.next != currentNode){
-                        preNode = preNode.next;
-                    }
-                    preNode.next = currentNode.next;
+class Solution147 {
+    public ListNode insertionSortList(ListNode head) {
+        if(head == null || head.next == null) return head ;
 
-                }
+        //多增加一个节点，方便在头节点之前插入的情况
+        ListNode dummyHead = new ListNode(0);
+        dummyHead.next = head;
+
+        //第一个节点默认有序
+        ListNode currentNode = head.next;
+        ListNode preNode = head;
+        while(currentNode != null){
+            ListNode insertPreNode = findInsertPreNode(dummyHead, currentNode);
+
+            //不需要交换的情况
+            if(insertPreNode == preNode){
+                preNode = preNode.next;
+                currentNode = currentNode.next;
+            }else{
+                //删除curr这个节点
+                preNode.next = currentNode.next;
+                //把curr插入到insertPreNode后面
+                currentNode.next = insertPreNode.next;
+                insertPreNode.next = currentNode;
+
+                currentNode = preNode.next;
             }
-            currentNode = currentNode.next;
         }
+        return dummyHead.next;
+    }
 
+    //找到需要插入节点的前一个节点
+    public ListNode findInsertPreNode(ListNode head,ListNode curr){
+        while(head.next != curr){
+            if(curr.val < head.next.val)
+                return head;
+
+            head = head.next;
+        }
+        //如果上面没有返回，就不要交换
         return head;
     }
 }
 
-class MainClass203 {
+class MainClass147 {
     public static int[] stringToIntegerArray(String input) {
         input = input.trim();
         input = input.substring(1, input.length() - 1);
@@ -45,7 +63,7 @@ class MainClass203 {
 
         String[] parts = input.split(",");
         int[] output = new int[parts.length];
-        for (int index = 0; index < parts.length; index++) {
+        for(int index = 0; index < parts.length; index++) {
             String part = parts[index].trim();
             output[index] = Integer.parseInt(part);
         }
@@ -59,7 +77,7 @@ class MainClass203 {
         // Now convert that list into linked list
         ListNode dummyRoot = new ListNode(0);
         ListNode ptr = dummyRoot;
-        for (int item : nodeValues) {
+        for(int item : nodeValues) {
             ptr.next = new ListNode(item);
             ptr = ptr.next;
         }
@@ -84,10 +102,8 @@ class MainClass203 {
         String line;
         while ((line = in.readLine()) != null) {
             ListNode head = stringToListNode(line);
-            line = in.readLine();
-            int val = Integer.parseInt(line);
 
-            ListNode ret = new Solution203().removeElements(head, val);
+            ListNode ret = new Solution147().insertionSortList(head);
 
             String out = listNodeToString(ret);
 

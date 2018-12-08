@@ -6,36 +6,26 @@ import java.io.InputStreamReader;
 
 /**
  * @Author: ymm
- * @Date: 2018/12/2 23:47
+ * @Date: 2018/12/7 20:29
  * @Description:
  */
-class Solution203 {
-    public ListNode removeElements(ListNode head, int val) {
-        if(head == null)
-            return null;
+class Solution83 {
+    public ListNode deleteDuplicates(ListNode head) {
         ListNode currentNode = head;
-        while (currentNode !=null){
-            if (currentNode.val == val) {
-                //如果是头节点
-                if (currentNode == head){
-                    head = head.next;
-                }else {
-                    ListNode preNode = head;
-                    while(preNode.next != currentNode){
-                        preNode = preNode.next;
-                    }
-                    preNode.next = currentNode.next;
-
-                }
+        while(currentNode != null && currentNode.next != null){
+            ListNode nextNode = currentNode.next;
+            if(nextNode!=null && nextNode.val == currentNode.val) {
+                currentNode.next = nextNode.next;
+                nextNode = null;
+            }else {
+                currentNode = currentNode.next;
             }
-            currentNode = currentNode.next;
         }
-
         return head;
     }
 }
 
-class MainClass203 {
+ class MainClass {
     public static int[] stringToIntegerArray(String input) {
         input = input.trim();
         input = input.substring(1, input.length() - 1);
@@ -45,7 +35,7 @@ class MainClass203 {
 
         String[] parts = input.split(",");
         int[] output = new int[parts.length];
-        for (int index = 0; index < parts.length; index++) {
+        for(int index = 0; index < parts.length; index++) {
             String part = parts[index].trim();
             output[index] = Integer.parseInt(part);
         }
@@ -59,7 +49,7 @@ class MainClass203 {
         // Now convert that list into linked list
         ListNode dummyRoot = new ListNode(0);
         ListNode ptr = dummyRoot;
-        for (int item : nodeValues) {
+        for(int item : nodeValues) {
             ptr.next = new ListNode(item);
             ptr = ptr.next;
         }
@@ -84,10 +74,8 @@ class MainClass203 {
         String line;
         while ((line = in.readLine()) != null) {
             ListNode head = stringToListNode(line);
-            line = in.readLine();
-            int val = Integer.parseInt(line);
 
-            ListNode ret = new Solution203().removeElements(head, val);
+            ListNode ret = new Solution83().deleteDuplicates(head);
 
             String out = listNodeToString(ret);
 
