@@ -5,7 +5,7 @@ package 数据;
  * @Date: 2018/12/25 16:28
  * @Description:
  */
-class Solution {
+class Solution832 {
     public int[][] flipAndInvertImage(int[][] A) {
         int n = A.length;
         for (int i = 0; i < n; i++) {
