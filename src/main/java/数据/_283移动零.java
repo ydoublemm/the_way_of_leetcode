@@ -1,0 +1,79 @@
+package 数据;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+
+/**
+ * @Author: ymm
+ * @Date: 2018/12/31 14:52
+ * @Description:
+ */
+class Solution283{
+    public void moveZeroes(int[] nums) {
+        int len = nums.length;
+        for (int i = 0; i < len; i++) {
+            if (nums[i] == 0) {
+                for (int j = i+1; j < len ; j++) {
+                    if (nums[j] != 0) {
+                        int temp = nums[j];
+                        nums[j] = nums[i];
+                        nums[i] = temp;
+                        break;
+                    }
+                }
+            }
+        }
+
+
+    }
+}
+
+class MainClass283 {
+    public static int[] stringToIntegerArray(String input) {
+        input = input.trim();
+        input = input.substring(1, input.length() - 1);
+        if (input.length() == 0) {
+            return new int[0];
+        }
+
+        String[] parts = input.split(",");
+        int[] output = new int[parts.length];
+        for(int index = 0; index < parts.length; index++) {
+            String part = parts[index].trim();
+            output[index] = Integer.parseInt(part);
+        }
+        return output;
+    }
+
+    public static String integerArrayToString(int[] nums, int length) {
+        if (length == 0) {
+            return "[]";
+        }
+
+        String result = "";
+        for(int index = 0; index < length; index++) {
+            int number = nums[index];
+            result += Integer.toString(number) + ", ";
+        }
+        return "[" + result.substring(0, result.length() - 2) + "]";
+    }
+
+    public static String integerArrayToString(int[] nums) {
+        return integerArrayToString(nums, nums.length);
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        String line;
+        while ((line = in.readLine()) != null) {
+            int[] nums = stringToIntegerArray(line);
+
+            new Solution283().moveZeroes(nums);
+            String out = integerArrayToString(nums);
+
+            System.out.print(out);
+        }
+    }
+}
